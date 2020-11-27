@@ -6,6 +6,11 @@
 (toggle-scroll-bar -1)
 (set-default 'truncate-lines t)
 
+;; helm
+(helm-mode 1)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+
 ;; do not use tabs
 (setq-default indent-tabs-mode nil)
 
@@ -61,14 +66,12 @@
 	  ))
 
 (require 'lsp-mode)
-(require 'elcord)
-(elcord-mode)
 (setq-default lsp-signature-render-documentation nil)
 (setq-default lsp-rust-analyzer-cargo-watch-command "clippy")
 (setq-default lsp-rust-analyzer-cargo-watch-enable t)
 (setq-default lsp-rust-analyzer-cargo-all-targets t)
 (setq-default lsp-rust-all-features t)
-
+(setq-default lsp-rust-all-targets t)
 
 (setq-default lsp-pyls-plugins-pylint-enabled t)
 (setq-default lsp-pyls-plugins-flake8-enabled t)

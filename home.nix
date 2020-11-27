@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
-
+let
+  toolbelt = import <toolbelt> {};
+in
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -14,14 +16,13 @@
   # changes in each release.
   home.stateVersion = "19.09";
   home.sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
-
   home.packages = with pkgs; [
     htop
     arandr
     glibcLocales
     ripgrep
     xsel
-    nixfmt
+    toolbelt
   ];
 
   home.file = {
@@ -33,6 +34,7 @@
   programs.emacs = {
     enable = true;
     extraPackages = epkgs: with epkgs; [
+      helm
       yaml-mode
       nix-mode
       elm-mode
@@ -53,7 +55,6 @@
       blacken
       terraform-mode
       xclip
-      elcord
     ];
   };
 
