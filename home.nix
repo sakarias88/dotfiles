@@ -15,7 +15,11 @@ in
   # the Home Manager release notes for a list of state version
   # changes in each release.
   home.stateVersion = "19.09";
-  home.sessionVariables.LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+  home.sessionVariables = {
+    LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+    GIT_SSH = "/usr/bin/ssh"; # https://github.com/NixOS/nixpkgs/issues/58132
+  };
+
   home.packages = with pkgs; [
     htop
     arandr
@@ -34,6 +38,8 @@ in
   programs.emacs = {
     enable = true;
     extraPackages = epkgs: with epkgs; [
+      yasnippet
+      dap-mode
       helm
       yaml-mode
       nix-mode
@@ -55,6 +61,7 @@ in
       blacken
       terraform-mode
       xclip
+      rainbow-delimiters
     ];
   };
 
@@ -141,7 +148,6 @@ in
       set -g default-terminal "xterm-256color"
       set-option -ga terminal-overrides ",xterm-256color:Tc"
       set-option -g default-shell ${pkgs.zsh}/bin/zsh
-
       # mouse (this really is the future)
       set -g mouse on
 
@@ -214,10 +220,5 @@ in
       signByDefault = true;
       key = "38EBE52A64C48459";
     };
-    package = pkgs.gitAndTools.gitFull.override {
-      openssh = pkgs.openssh_gssapi;
-    };
   };
-
-
 }

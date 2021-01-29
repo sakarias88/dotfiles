@@ -6,6 +6,22 @@
 (toggle-scroll-bar -1)
 (set-default 'truncate-lines t)
 
+;; Used for snippets, for example auto complete an implementation for an interface
+(require 'yasnippet)
+(yas-global-mode 1)
+
+;;set gdb debugger to use separate window
+(setq gdb-many-windows t gdb-use-separate-io-buffer t) 
+
+;;scroll window up/down by one line
+(global-set-key (kbd "M-n") (kbd "C-u 1 C-v"))
+(global-set-key (kbd "M-p") (kbd "C-u 1 M-v"))
+
+;; dap mode debugging
+(require 'dap-lldb)
+(dap-auto-configure-mode 1)
+(set-default 'dap-lldb-degub-program "lldb-vscode")
+
 ;; helm
 (helm-mode 1)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -50,19 +66,19 @@
 
 (add-hook 'after-init-hook (lambda ()
           (load-theme 'nord t)
-	  (neotree-dir "~/code")
+	  (neotree-dir (getenv "PWD"))
 	  (projectile-mode +1)
 	  (global-set-key (kbd "C-x p") 'fzf)
 	  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 	  (global-set-key [f8] 'neotree-toggle)
-	  
+	  (neotree-hide)
 	  (require 'yaml-mode)
 	  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 	  (require 'protobuf-mode)
 
 
-          ;; Add lsp which key mode integration (help command text at bottom)
-          (which-key-mode)
+	  ;; Add lsp which key mode integration (help command text at bottom)
+	  (which-key-mode)
 	  ))
 
 (require 'lsp-mode)
@@ -81,11 +97,21 @@
 (add-hook 'elm-mode-hook 'elm-format-on-save-mode)
 (add-hook 'python-mode-hook 'blacken-mode)
 
+;; Add rainbow delimiters for rust language
+(add-hook 'rust-mode-hook #'rainbow-delimiters-mode)
+
+;; Add rainbow delimiters for most languages
+;;(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+
 (require 'rust-mode)
 (add-hook 'rust-mode-hook
           (lambda ()
             (setq indent-tabs-mode nil)
             (setq lsp-rust-server 'rust-analyzer)
+            (lsp)))
+
+(add-hook 'c-mode-hook
+          (lambda ()
             (lsp)))
 
 (add-hook 'before-save-hook (lambda () (when (eq 'rust-mode major-mode)
