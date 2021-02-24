@@ -18,6 +18,7 @@ in
   home.sessionVariables = {
     LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     GIT_SSH = "/usr/bin/ssh"; # https://github.com/NixOS/nixpkgs/issues/58132
+    EDITOR = "emacs";
   };
 
   home.packages = with pkgs; [
