@@ -6,12 +6,20 @@
 (toggle-scroll-bar -1)
 (set-default 'truncate-lines t)
 
+;; Automatically reload files when they change on disk
+(setq auto-revert-check-vc-info t)
+(setq auto-revert-avoid-polling t)
+(global-auto-revert-mode t)
+
 ;; Used for snippets, for example auto complete an implementation for an interface
 (require 'yasnippet)
 (yas-global-mode 1)
 
 ;;set gdb debugger to use separate window
-(setq gdb-many-windows t gdb-use-separate-io-buffer t) 
+(setq gdb-many-windows t gdb-use-separate-io-buffer t)
+
+;;highlight current line number
+(setq column-number-mode t)
 
 ;;scroll window up/down by one line
 (global-set-key (kbd "M-n") (kbd "C-u 1 C-v"))
@@ -108,6 +116,7 @@
           (lambda ()
             (setq indent-tabs-mode nil)
             (setq lsp-rust-server 'rust-analyzer)
+            (cargo-minor-mode)
             (lsp)))
 
 (add-hook 'c-mode-hook
@@ -142,3 +151,29 @@
 ;; add hook for which-key-mode
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+
+;;Clojure
+
+;; Format on save
+(add-hook 'before-save-hook
+          (lambda ()
+            (when (or
+                   (eq 'clojure-mode major-mode)
+                   (eq 'clojurescript-mode major-mode))
+              (lsp-format-buffer))))
+
+;; Add rainbow delimiters for lsp
+(add-hook 'lsp-mode-hook #'rainbow-delimiters-mode)
+
+(add-hook 'clojure-mode-hook 'lsp)
+(add-hook 'clojurescript-mode-hook 'lsp)
+(add-hook 'clojurec-mode-hook 'lsp)
+
+(setq gc-cons-threshold (* 100 1024 1024)
+      read-process-output-max (* 1024 1024)
+      treemacs-space-between-root-nodes nil
+      company-minimum-prefix-length 1
+      lsp-signature-auto-activate nil
+      ; lsp-enable-indentation nil ; uncomment to use cider indentation instead of lsp
+      ; lsp-enable-completion-at-point nil ; uncomment to use cider completion instead of lsp
+      )

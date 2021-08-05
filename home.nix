@@ -39,6 +39,7 @@ in
   programs.emacs = {
     enable = true;
     extraPackages = epkgs: with epkgs; [
+      cargo
       yasnippet
       dap-mode
       helm
@@ -63,6 +64,12 @@ in
       terraform-mode
       xclip
       rainbow-delimiters
+
+      # clojure
+      clojure-mode
+      lsp-mode
+      cider
+      lsp-treemacs
     ];
   };
 
@@ -99,8 +106,6 @@ in
       bindkey "''${terminfo[khome]}" beginning-of-line
       bindkey "''${terminfo[kend]}" end-of-line
       bindkey "''${terminfo[kdch1]}" delete-char
-
-
 
       # arrow to search
       autoload -U up-line-or-beginning-search
@@ -220,6 +225,9 @@ in
     signing = {
       signByDefault = true;
       key = "38EBE52A64C48459";
+    };
+    extraConfig = {
+      pull.rebase = true;
     };
   };
 }
