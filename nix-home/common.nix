@@ -54,7 +54,7 @@ in
       lsp-ui
       which-key
       flycheck
-      company-lsp
+#      company-lsp
       company
       rust-mode
       flymake-diagnostic-at-point
@@ -142,7 +142,6 @@ in
   services.gpg-agent = {
     enable = true;
     defaultCacheTtl = 1800;
-    enableSshSupport = true;
     enableScDaemon = true;
   };
 
@@ -223,7 +222,6 @@ in
     userEmail = "sakarias.johansson@goodbyekansas.com";
     userName = "Sakarias Johansson";
     signing = {
-      signByDefault = true;
       key = "38EBE52A64C48459";
     };
     extraConfig = {

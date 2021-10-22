@@ -1,0 +1,1 @@
+/home/sakarias/code/dotfiles/wsl.nix
