@@ -91,32 +91,7 @@ in
     enable = true;
     defaultKeymap = "emacs";
     enableAutosuggestions = true;
-    initExtra = ''
-      # don't add coppi to python env
-      export REZ_USED=1
-
-      # allow tab completion in the middle of a word
-      setopt COMPLETE_IN_WORD
-
-      # mark completion
-      zstyle ':completion:*' menu select
-      zstyle ':completion:*' list-colors '''
-      zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
-      typeset -g -A key
-      bindkey "''${terminfo[khome]}" beginning-of-line
-      bindkey "''${terminfo[kend]}" end-of-line
-      bindkey "''${terminfo[kdch1]}" delete-char
-
-      # arrow to search
-      autoload -U up-line-or-beginning-search
-      autoload -U down-line-or-beginning-search
-      zle -N up-line-or-beginning-search
-      zle -N down-line-or-beginning-search
-      bindkey '^[[A' up-line-or-beginning-search
-      bindkey '^[[B' down-line-or-beginning-search
-      bindkey '^[OA' up-line-or-beginning-search
-      bindkey '^[OB' down-line-or-beginning-search
-    '';
+    initExtra = builtins.readFile ./rc.zsh;
     plugins = [
       {
         name = "pure";
