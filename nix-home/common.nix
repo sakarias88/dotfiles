@@ -36,6 +36,10 @@ in
     };
   };
 
+  programs.gpg.scdaemonSettings = {
+    reader-port = "Yubico Yubi";
+  };
+
   programs.emacs = {
     enable = true;
     extraPackages = epkgs: with epkgs; [
