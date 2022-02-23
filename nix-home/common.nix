@@ -36,10 +36,6 @@ in
     };
   };
 
-  programs.gpg.scdaemonSettings = {
-    reader-port = "Yubico Yubi";
-  };
-
   programs.emacs = {
     enable = true;
     extraPackages = epkgs: with epkgs; [
@@ -72,7 +68,7 @@ in
       # clojure
       clojure-mode
       lsp-mode
-      cider
+      # DISABLED: cider
       lsp-treemacs
     ];
   };
