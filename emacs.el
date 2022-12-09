@@ -30,6 +30,45 @@
 (dap-auto-configure-mode 1)
 (set-default 'dap-lldb-degub-program "lldb-vscode")
 
+;; C/C++
+(setq-default c-basic-offset 4)
+(add-hook 'before-save-hook (lambda () (when (or (eq 'c-mode major-mode) (eq 'c++-mode major-mode))
+                                           (lsp-format-buffer))))
+;; LLVM style for C/C++
+(defun llvm-lineup-statement (langelem)
+  (let ((in-assign (c-lineup-assignments langelem)))
+    (if (not in-assign)
+        '++
+      (aset in-assign 0
+            (+ (aref in-assign 0)
+               (* 2 c-basic-offset)))
+      in-assign)))
+
+;; Add a cc-mode style for editing LLVM C and C++ code
+(c-add-style "llvm.org"
+             '("gnu"
+               (fill-column . 80)
+               (c++-indent-level . 2)
+               (c-basic-offset . 2)
+               (indent-tabs-mode . nil)
+               (c-offsets-alist . ((arglist-intro . ++)
+                                   (innamespace . 0)
+                                   (member-init-intro . ++)
+                                   (statement-cont . llvm-lineup-statement)))))
+
+(add-to-list 'c-default-style '(other . "llvm.org"))
+
+;; color compilation mode
+(when (require 'ansi-color nil t)
+  (defun my-colorize-compilation-buffer ()
+    (when (eq major-mode 'compilation-mode)
+      (ansi-color-apply-on-region compilation-filter-start (point-max))))
+  (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
+
+;; addon for java lsp
+(require 'lsp-java)
+(add-hook 'java-mode-hook #'lsp)
+
 ;; helm
 (helm-mode 1)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -74,7 +113,7 @@
 
 (add-hook 'after-init-hook (lambda ()
           (load-theme 'nord t)
-	  (neotree-dir (getenv "PWD"))
+	  ;;(neotree-dir (getenv "PWD"))
 	  (projectile-mode +1)
 	  (global-set-key (kbd "C-x p") 'fzf)
 	  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
@@ -104,6 +143,7 @@
 (add-hook 'elm-mode-hook #'lsp)
 (add-hook 'elm-mode-hook 'elm-format-on-save-mode)
 (add-hook 'python-mode-hook 'blacken-mode)
+(add-hook 'c-mode-common-hook #'lsp)
 
 ;; Add rainbow delimiters for rust language
 (add-hook 'rust-mode-hook #'rainbow-delimiters-mode)
