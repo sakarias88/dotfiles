@@ -14,7 +14,10 @@ in
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "19.09";
+  home.username = "sakarias";
+  home.homeDirectory = "/home/sakarias";
+  home.stateVersion = "22.11";
+
   home.sessionVariables = {
     LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     GIT_SSH = "/usr/bin/ssh"; # https://github.com/NixOS/nixpkgs/issues/58132
@@ -54,6 +57,7 @@ in
       lsp-ui
       which-key
       flycheck
+      lsp-java
 #      company-lsp
       company
       rust-mode
@@ -64,6 +68,7 @@ in
       terraform-mode
       xclip
       rainbow-delimiters
+      typescript-mode
 
       # clojure
       clojure-mode
