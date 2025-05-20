@@ -1,6 +1,12 @@
 { config, pkgs, ... }:
 let
   toolbelt = import <toolbelt> {};
+  imageCommand = name: (pkgs.runCommand name {} ''
+      mkdir -p $out/bin
+      echo "#! ${pkgs.runtimeShell}" > $out/bin/${name}
+      cat ${./. + "/${name}.sh"} >> $out/bin/${name}
+      chmod +x $out/bin/${name}
+    '' );
 in
 {
   # Let Home Manager install and manage itself.
@@ -16,7 +22,7 @@ in
   # changes in each release.
   home.username = "sakarias";
   home.homeDirectory = "/home/sakarias";
-  home.stateVersion = "22.11";
+  home.stateVersion = "23.11";
 
   home.sessionVariables = {
     LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
@@ -31,6 +37,8 @@ in
     ripgrep
     xsel
     toolbelt
+    (imageCommand "aladob")
+    (imageCommand "cheeki_breeki")
   ];
 
   home.file = {
@@ -42,6 +50,7 @@ in
   programs.emacs = {
     enable = true;
     extraPackages = epkgs: with epkgs; [
+      powershell
       cargo
       yasnippet
       dap-mode
@@ -95,7 +104,7 @@ in
   programs.zsh = {
     enable = true;
     defaultKeymap = "emacs";
-    enableAutosuggestions = true;
+    #autosuggestion.enable = true;
     initExtra = builtins.readFile ./rc.zsh;
     plugins = [
       {

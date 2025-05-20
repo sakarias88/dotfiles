@@ -6,6 +6,7 @@ function kill_work_env() {
     tmux kill-session -t "$sessionName"
 }
 
+# TODO: Add support for reading work envs from file.
 function work_env() {
     echo "Setting up tmux work environment."
     if [ -z "$TMUX" ]; then
@@ -18,24 +19,29 @@ function work_env() {
         if [ $? -ne 0 ]; then
             echo "Creating new session..."
             cd ~/code
-            paneSize=40
+            paneSize=10
 
             # Defining window titles here since it fucks up my text editor.
             # An emoji is not always the same size...
-            pipelineTitle="pipeline 📠"
-            firmTitle="firm ️🏦️" 
-            nedrylandTitle="nedryland ️🦖"
-
+            pipelineTitle="pipeline"
+            firmTitle="firm"
+            nedrylandTitle="nedryland"
+            nedryglotTitle="nedryglot"
+            racerTracerTitle="racer-tracer"
             # Tmux does not like ~ in paths.
             # It can use relative paths or full paths.
             workingDirectory=$(realpath ~/code)
             pipelinePath=$(realpath ~/code/pipeline)
             firmPath=$(realpath ~/code/firm)
             nedrylandPath=$(realpath ~/code/nedryland)
+            nedryglotPath=$(realpath ~/code/nedryglot)
+            racerTracerPath=$(realpath ~/code/racer-tracer)
 
-            tmux new-session -s "$sessionName" -c $workingDirectory "cd $pipelinePath; emacs -nw" \; rename-window -t 0 "$pipelineTitle" \; split-window -c $pipelinePath -h \; resize-pane -t 1 -x $paneSize \; \
-                 new-window -c $firmPath "emacs -nw" \; rename-window -t 1 "$firmTitle" \; split-window -c  $firmPath -h \; resize-pane -t 1 -x $paneSize \; \
-                 new-window -c $nedrylandPath "emacs -nw" \; rename-window -t 2 "$nedrylandTitle" \; split-window -c $nedrylandPath -h \; resize-pane -t 1 -x $paneSize \;
+            tmux new-session -s "$sessionName" -c $workingDirectory "cd $pipelinePath; emacs -nw" \; rename-window -t 0 "$pipelineTitle" \; split-window -c $pipelinePath -v \; resize-pane -t 1 -y $paneSize \; \
+                 new-window -c $firmPath "emacs -nw" \; rename-window -t 1 "$firmTitle" \; split-window -c  $firmPath -v \; resize-pane -t 1 -y $paneSize \; \
+                 new-window -c $nedrylandPath "emacs -nw" \; rename-window -t 2 "$nedrylandTitle" \; split-window -c $nedrylandPath -v \; resize-pane -t 1 -y $paneSize \; \
+                 new-window -c $nedryglotPath "emacs -nw" \; rename-window -t 3 "$nedryglotTitle" \; split-window -c $nedryglotPath -v \; resize-pane -t 1 -y $paneSize \; \
+                 new-window -c $racerTracerPath "emacs -nw" \; rename-window -t 4 "$racerTracerTitle" \; split-window -c $racerTracerPath -v \; resize-pane -t 1 -y $paneSize \;
         fi
     else
         echo "You are already in a tmux session!"
