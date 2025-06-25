@@ -20,9 +20,10 @@ in
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.username = "sakarias";
-  home.homeDirectory = "/home/sakarias";
-  home.stateVersion = "23.11";
+
+  home.username = "sakarias.johansson";
+  home.homeDirectory = "/mnt/home/sakarias.johansson/";
+  home.stateVersion = "24.11";
 
   home.sessionVariables = {
     LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
@@ -98,7 +99,7 @@ in
   };
 
   programs.gpg = {
-    enable = true;
+    enable = false;
   };
 
   programs.zsh = {
@@ -106,6 +107,10 @@ in
     defaultKeymap = "emacs";
     #autosuggestion.enable = true;
     initExtra = builtins.readFile ./rc.zsh;
+    autosuggestion = {
+      enable = true;
+    };
+
     plugins = [
       {
         name = "pure";
@@ -122,14 +127,14 @@ in
           owner = "chriskempson";
           repo = "base16-shell";
           rev = "master";
-          sha256 = "1yj36k64zz65lxh28bb5rb5skwlinixxz6qwkwaf845ajvm45j1q";
+          sha256 = "sha256-X89FsG9QICDw3jZvOCB/KsPBVOLUeE7xN3VCtf0DD3E=";
         };
       }
     ];
   };
 
   services.gpg-agent = {
-    enable = true;
+    enable = false;
     defaultCacheTtl = 1800;
     enableScDaemon = true;
   };
